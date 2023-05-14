@@ -26,7 +26,8 @@ const authSchema = new mongoose.Schema(
       minlength: 6,
     },
     role: {
-      type: String,
+      type: Number,
+      default: 2,
     },
   },
   { timeStamps: true }

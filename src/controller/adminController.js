@@ -1,5 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const librarymodel = require("../model/booksModels");
+const authModule = require("../model/authModule");
+const role = require("../helper/role");
 
 const getAllBooks = asyncHandler(async (req, res, next) => {
   const books = await librarymodel.find();
@@ -38,8 +40,10 @@ const updateBook = asyncHandler(async (req, res, next) => {
   });
   res.status(200).json({ update });
 });
+
 const deleteBook = asyncHandler(async (req, res, next) => {
   const book = await librarymodel.findById(req.params.id);
+  console.log(book);
   if (!book) {
     res.status(400).json({ message: "con't found the book" });
   }
@@ -50,10 +54,29 @@ const deleteBook = asyncHandler(async (req, res, next) => {
   res.status(200).json({ message: "data has been deleted" });
 });
 
+const deleteUser = asyncHandler(async (req, res) => {
+  const user = await authModule.findById(req.params.id);
+  if (!user) {
+    res.status(400).json({ message: "user not found" });
+  }
+  if (user.role === role.ADMIN) {
+    res
+      .status(400)
+      .json({ message: "you don't have a access to delete the admin" });
+  }
+  const removeUser = await authModule.findByIdAndRemove(
+    req.params.id,
+    req.body,
+    { new: true }
+  );
+  res.status(200).json({ message: "user has been deleted" });
+});
+
 module.exports = {
   getAllBooks,
   getByIdBook,
   createBook,
   updateBook,
   deleteBook,
+  deleteUser,
 };

@@ -5,8 +5,8 @@ const connectDb = async () => {
     const connect = await mongoose.connect(process.env.DB_URL);
     console.log(
       "database connected",
-      connect.connection.host,
-      connect.connection.name
+      connect.connection.host
+      // connect.connection.name
     );
   } catch (err) {
     console.log(err);

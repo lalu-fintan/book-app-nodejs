@@ -8,7 +8,7 @@ const UserId = require("./uuid/registerId");
 
 const register = asyncHandler(async (req, res) => {
   const { name, email, phonenumber, password, role } = req.body;
-  if (!name || !email || !phonenumber || !password || !role) {
+  if (!name || !email || !phonenumber || !password) {
     res.status(400);
     throw new Error("All the fields are required");
   }
@@ -33,7 +33,7 @@ const register = asyncHandler(async (req, res) => {
     password: hasePassword,
     role,
   });
-  // console.log(user);
+
   if (user) {
     res.status(200).json({ id: user.userId, name: user.name, role: user.role });
   } else {
